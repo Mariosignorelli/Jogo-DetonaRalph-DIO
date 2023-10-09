@@ -7,11 +7,26 @@ const state = {
     },
     value:{
         timeId: null,
+        countDowmTimerId: setInterval(countDowm, 1000),
         gamevelocity: 1000,
         hitposition: 0,
         result: 0,
+        currentTimer: 60,
     },
 };
+function countDowm(){
+    state.value.currentTimer--;
+    state.view.timeLeft.textContent = state.value.currentTimer
+    if(state.value.currentTimer <= 0){
+        clearInterval(state.value.countDowmTimerId)
+        clearInterval(state.value.timeId)
+        alert(`Game over sua pontuação foi ${state.value.result}` )
+    }
+}
+function play(){
+    let audio = new Audio("./src/audios/hit.m4a")
+    audio.play()
+}
 
 function randomSquere(){
     state.view.squeres.forEach((squere) =>{
@@ -33,6 +48,7 @@ function addlistenerHitBox(){
                 state.value.result++
                 state.view.score.textContent = state.value.result
                 state.value.hitposition = null
+                play()
             }
         })
     })
@@ -41,5 +57,6 @@ function addlistenerHitBox(){
 function init(){
   moveEnemy()
   addlistenerHitBox()
+
 }
 init()
