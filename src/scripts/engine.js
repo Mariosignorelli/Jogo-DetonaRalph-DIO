@@ -8,6 +8,8 @@ const state = {
     value:{
         timeId: null,
         gamevelocity: 1000,
+        hitposition: 0,
+        result: 0,
     },
 };
 
@@ -18,6 +20,7 @@ function randomSquere(){
     let randomNumber = Math.floor(Math.random() * 9)
     let randomSqueres = state.view.squeres[randomNumber]
     randomSqueres.classList.add("enemy")
+    state.value.hitposition = randomSqueres.id
 }
 function moveEnemy(){
     state.value.timeId = setInterval(randomSquere, state.value.gamevelocity)
@@ -25,11 +28,18 @@ function moveEnemy(){
 
 function addlistenerHitBox(){
     state.view.squeres.forEach((squere) => {
-
+        squere.addEventListener("mousedown", () =>{
+            if (squere.id === state.value.hitposition) {
+                state.value.result++
+                state.view.score.textContent = state.value.result
+                state.value.hitposition = null
+            }
+        })
     })
   
 }
 function init(){
   moveEnemy()
+  addlistenerHitBox()
 }
 init()
